@@ -53,29 +53,28 @@ f.write(CODE_BOILERPLATE)
 f.close()
 
 TEST_BOILERPLATE = f"""import pytest
-from day_{day} import solve_problem_1, solve_problem_2, PROBLEM_1_EXAMPLE_1_INPUT, PROBLEM_1_EXAMPLE__1_ANSWER, PROBLEM_2_EXAMPLE_1_INPUT, PROBLEM_2_EXAMPLE__1_ANSWER 
-
+import day_{day}
 
 @pytest.mark.parametrize(
     "test_input,expected",
     [
-        (PROBLEM_1_EXAMPLE_1_INPUT, PROBLEM_1_EXAMPLE__1_ANSWER),
-        # (PROBLEM_1_EXAMPLE_1_INPUT, PROBLEM_1_EXAMPLE__1_ANSWER), # ADD YOUR OWN TEST CASES HERE
+        (day_{day}.PROBLEM_1_EXAMPLE_1_INPUT, day_{day}.PROBLEM_1_EXAMPLE__1_ANSWER),
+        # (day_{day}.PROBLEM_1_EXAMPLE_1_INPUT, day_{day}.PROBLEM_1_EXAMPLE__1_ANSWER), # ADD YOUR OWN TEST CASES HERE
     ],
 )
 def test_solve_problem_1(test_input, expected):
-    assert solve_problem_1(test_input) == expected
+    assert day_{day}.solve_problem_1(test_input) == expected
 
 
 @pytest.mark.parametrize(
     "test_input,expected",
     [
-        (PROBLEM_2_EXAMPLE_1_INPUT, PROBLEM_2_EXAMPLE__1_ANSWER),
-        # (PROBLEM_1_EXAMPLE_1_INPUT, PROBLEM_1_EXAMPLE__1_ANSWER), # ADD YOUR OWN TEST CASES HERE
+        (day_{day}.PROBLEM_2_EXAMPLE_1_INPUT, day_{day}.PROBLEM_2_EXAMPLE__1_ANSWER),
+        # (day_{day}.PROBLEM_1_EXAMPLE_1_INPUT, day_{day}.PROBLEM_1_EXAMPLE__1_ANSWER), # ADD YOUR OWN TEST CASES HERE
     ],
 )
 def test_solve_problem_2(test_input, expected):
-    assert solve_problem_2(test_input) == expected
+    assert day_{day}.solve_problem_2(test_input) == expected
 
 """
 
@@ -88,22 +87,24 @@ f.close()
 RUN_BOILERPLATE = f"""# Run solution on day {day} input code
 # Solution code is responsible for printing solution
 
-from day_{day} import solve_problem_1, solve_problem_2
+import day_{day}
 
 try:
-    f = open("day_{day}_input.txt", "r")
+    f = open("day_{day}/day_{day}_input.txt", "r")
     contents = f.read()
-    print("Solution 1 Result:\\n")
-    solve_problem_1(contents)
+    print("Solution 1 Result:")
+    day_{day}.solve_problem_1(contents)
     f.close()
 except NotImplementedError:
     pass
+    
+print("\\n")
 
 try:
-    f = open("day_{day}_input.txt", "r")
+    f = open("day_{day}/day_{day}_input.txt", "r")
     contents = f.read()
-    print("Solution 2 Result:\\n")
-    solve_problem_2(contents)
+    print("Solution 2 Result:")
+    day_{day}.solve_problem_2(contents)
     f.close()
 except NotImplementedError:
     pass
