@@ -1,6 +1,7 @@
 import datetime
 import requests
 import webbrowser
+import os
 
 session_token = "53616c7465645f5f14d1e79c14dfafa075bdb621038817369a36afd9c4f1fa5e612ae6d6520e18bed3c51a27496fa8b063b0b9df0f161656478789df7cc36c8a"
 year = "2023"
@@ -19,7 +20,10 @@ url = f"https://adventofcode.com/{year}/day/{day}/input"
 headers = headers = {"Cookie": "session=" + session_token}
 day_input = requests.get(url, headers=headers)
 
-f = open(f"day_{day}_input.txt", "w")
+parent_dir_path = f"day_{day}"
+os.mkdir(parent_dir_path)
+
+f = open(os.path.join(parent_dir_path, f"day_{day}_input.txt"), "w")
 f.write(day_input.text)
 f.close()
 
@@ -44,7 +48,7 @@ def solve_problem_2(input: str):
 """
 
 
-f = open(f"day_{day}.py", "w")
+f = open(os.path.join(parent_dir_path, f"day_{day}.py"), "w")
 f.write(CODE_BOILERPLATE)
 f.close()
 
@@ -76,7 +80,7 @@ def test_solve_problem_2(test_input, expected):
 """
 
 
-f = open(f"test_day_{day}.py", "w")
+f = open(os.path.join(parent_dir_path, f"test_day_{day}.py"), "w")
 f.write(TEST_BOILERPLATE)
 f.close()
 
@@ -105,6 +109,6 @@ except NotImplementedError:
     pass
 """
 
-f = open(f"run_day_{day}.py", "w")
+f = open(os.path.join(parent_dir_path, f"run_day_{day}.py"), "w")
 f.write(RUN_BOILERPLATE)
 f.close()
