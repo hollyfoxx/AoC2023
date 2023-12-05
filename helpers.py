@@ -10,6 +10,11 @@ def get_lines(input: str):
         yield line
 
 
+def get_all_lines(input: str):
+    lines = input.split('\n')
+    return [line for line in lines if line.strip()]
+
+
 class Grid:
     """
     A simple grid class.
