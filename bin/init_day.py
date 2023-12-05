@@ -2,28 +2,50 @@ import datetime
 import requests
 import webbrowser
 import os
+import argparse
 
-session_token = "-"
-year = "2023"
+# todo : port past years solution to this repo
+
+parser = argparse.ArgumentParser(description='Initialize Advent of Code day')
+parser.add_argument('-d', '--day')
+parser.add_argument('-y', '--year')
+parser.add_argument('-nb', '--no_browser', action='store_true')
+args = parser.parse_args()
+
+session_token = os.environ.get('AOC_SESSION_TOKEN')
+if not session_token:
+    answer = input('No session token provided; problem input will be missing. Continue? [Y] ')
+    if answer.lower() != 'y':
+        exit(0)
+
 today = datetime.datetime.now()
-# day = "1"
-day = today.day
+year = args.year if args.year else today.year
+day = args.day if args.day else today.day
+
+if int(year) > today.year or (int(year) == today.year and int(day) > today.day):
+    print("That day hasn't happened yet!")
+    exit(0)
 
 if int(day) > 25:
-    print("Sorry, it's after Christmas :( have fun next year!")
+    print("Sorry, that day is after Christmas :(")
     exit(0)
 
 
 webbrowser.open_new_tab(f"https://adventofcode.com/{year}/day/{day}")
 
 url = f"https://adventofcode.com/{year}/day/{day}/input"
-headers = headers = {"Cookie": "session=" + session_token}
+headers = {"Cookie": "session=" + session_token}
 day_input = requests.get(url, headers=headers)
 
-parent_dir_path = f"day_{day}"
-os.mkdir(parent_dir_path)
+try:
+    os.mkdir(year)
+except:
+    pass
 
-f = open(os.path.join(parent_dir_path, f"day_{day}_input.txt"), "w")
+parent_dir_path = f"day_{day}"
+os.mkdir(os.path.join(year, parent_dir_path))
+
+f = open(os.path.join(year, parent_dir_path, f"day_{day}_input.txt"), "w")
 f.write(day_input.text)
 f.close()
 
@@ -48,7 +70,7 @@ def solve_problem_2(input: str):
 """
 
 
-f = open(os.path.join(parent_dir_path, f"day_{day}.py"), "w")
+f = open(os.path.join(year, parent_dir_path, f"day_{day}.py"), "w")
 f.write(CODE_BOILERPLATE)
 f.close()
 
@@ -79,7 +101,7 @@ def test_solve_problem_2(test_input, expected):
 """
 
 
-f = open(os.path.join(parent_dir_path, f"test_day_{day}.py"), "w")
+f = open(os.path.join(year, parent_dir_path, f"test_day_{day}.py"), "w")
 f.write(TEST_BOILERPLATE)
 f.close()
 
@@ -110,6 +132,6 @@ except NotImplementedError:
     pass
 """
 
-f = open(os.path.join(parent_dir_path, f"run_day_{day}.py"), "w")
+f = open(os.path.join(year, parent_dir_path, f"run_day_{day}.py"), "w")
 f.write(RUN_BOILERPLATE)
 f.close()
