@@ -19,7 +19,7 @@ if not session_token:
         exit(0)
 
 today = datetime.datetime.now()
-year = args.year if args.year else today.year
+year = args.year if args.year else str(today.year)
 day = args.day if args.day else today.day
 
 if int(year) > today.year or (int(year) == today.year and int(day) > today.day):
