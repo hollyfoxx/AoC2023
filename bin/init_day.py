@@ -112,7 +112,7 @@ RUN_BOILERPLATE = f"""# Run solution on day {day} input code
 import day_{day}
 
 try:
-    f = open("day_{day}/day_{day}_input.txt", "r")
+    f = open("{year}/day_{day}/day_{day}_input.txt", "r")
     contents = f.read()
     print("Solution 1 Result:")
     day_{day}.solve_problem_1(contents)
@@ -123,7 +123,7 @@ except NotImplementedError:
 print("\\n")
 
 try:
-    f = open("day_{day}/day_{day}_input.txt", "r")
+    f = open("{year}/day_{day}/day_{day}_input.txt", "r")
     contents = f.read()
     print("Solution 2 Result:")
     day_{day}.solve_problem_2(contents)
