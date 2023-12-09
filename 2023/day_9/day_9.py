@@ -17,7 +17,6 @@ def get_new_history(parsed: List[int]) -> List[int]:
 
     return current_differences
 
-
 def solve_problem_1(input: str):
     sum = 0
     for line in helpers.get_lines(input):
@@ -37,9 +36,25 @@ def solve_problem_1(input: str):
     return sum
 
 
-PROBLEM_2_EXAMPLE_1_INPUT = "REPLACE_ME"
-PROBLEM_2_EXAMPLE__1_ANSWER = "REPLACE_ME"
+PROBLEM_2_EXAMPLE_1_INPUT = "10 13 16 21 30 45"
+PROBLEM_2_EXAMPLE__1_ANSWER = 5
 
 
 def solve_problem_2(input: str):
-    raise NotImplementedError()
+    sum = 0
+    for line in helpers.get_lines(input):
+        parsed = [int(num) for num in line.split()]
+        historical_differences = [parsed]
+
+        while not all(num == 0 for num in historical_differences[-1]):
+            historical_differences.append(get_new_history(historical_differences[-1]))
+
+        previous = 0
+        for historical_entry in reversed(historical_differences):
+            previous = historical_entry[0] - previous
+
+        sum += previous
+
+    print(f"The sum of all extrapolated values is {sum}")
+    return sum
+
