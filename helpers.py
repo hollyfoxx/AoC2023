@@ -1,4 +1,4 @@
-from typing import Tuple, Iterable, Any
+from typing import Tuple, Iterable, Any, Union
 
 
 def get_lines(input: str):
@@ -25,6 +25,11 @@ class Grid:
     def __init__(self, input: str):
         rows = input.split("\n")
         self.map = [list(row) for row in rows]
+
+    def all_coords(self) -> Iterable[Tuple[int, int]]:
+        for row in range(len(self.map)):
+            for col in range(len(self.map[row])):
+                yield row, col
 
     def get_coord_value(self, coord: Tuple[int, int]) -> Any:
         return self.map[coord[0]][coord[1]]
@@ -113,7 +118,6 @@ class Grid:
 
         return row + 1, col + 1
 
-
     def get_surrounding_values_span(self, row: int, span: Tuple[int, int]) -> Iterable[Any]:
         for col in range(span[0], span[1]):
             current = (row, col)
@@ -129,6 +133,18 @@ class Grid:
                 yield self.get_bottom_right_value(current)
                 yield self.get_right_value(current)
                 yield self.get_top_right_value(current)
+
+    def get_adjacent_values(self, coord: Tuple[int, int]) -> Tuple[
+        Union[int, None], Union[int, None], Union[int, None], Union[int, None]
+    ]:
+        """Return a tuple of (left, top, right, bottom) values to coordinate. If adjacent coord does not exist,
+        None will be included instead."""
+        left = self.get_left_value(coord)
+        top = self.get_top_value(coord)
+        right = self.get_right_value(coord)
+        bottom = self.get_bottom_value(coord)
+
+        return left, top, right, bottom
 
     def get_top_value(self, coord: Tuple[int, int]) -> Any:
         row, col = coord[0], coord[1]
