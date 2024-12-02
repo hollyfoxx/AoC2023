@@ -14,83 +14,60 @@ PROBLEM_1_EXAMPLE_1_INPUT = '''
 '''
 PROBLEM_1_EXAMPLE__1_ANSWER = 2
 
+def is_report_safe(levels: List[int]) -> bool:
+    step_direction = levels[0] - levels[1]
+    if step_direction > 0:
+        report_direction = "dec"
+    elif step_direction < 0:
+        report_direction = "inc"
+    else:
+        return False
 
-
-def solve_problem_1(input: str):
-    safe_reports = 0
-    for report in helpers.get_lines(input):
-        levels = [int(x) for x in report.split()]
-        step_direction = levels[0] - levels[1]
-        if step_direction > 0:
-            report_direction = "dec"
-        elif step_direction < 0:
-            report_direction = "inc"
-        else:
+    safe = True
+    for cur, next, pos in helpers.multi_iterate(levels):
+        if next is None:
             continue
 
-        safe = True
-        for cur, next, pos in helpers.multi_iterate(levels):
-            if next is None:
-                continue
+        step_direction = cur - next
+        step_size = abs(step_direction)
+        if step_size < 1 or step_size > 3:
+            safe = False
+            break
 
-            step_direction = cur - next
-            if abs(step_direction) < 1 or abs(step_direction) > 3:
-                safe = False
-                break
+        if step_direction > 0 and report_direction == "dec":
+            continue
+        elif step_direction < 0 and report_direction == "inc":
+            continue
+        else:
+            safe = False
+            break
 
-            if step_direction > 0 and report_direction == "dec":
-                continue
-            elif step_direction < 0 and report_direction == "inc":
-                continue
-            else:
-                safe = False
-                break
+    return safe
 
-        if safe:
-            safe_reports += 1
+def find_bad_reports(input: str):
+    bad_reports = []
+    for report in helpers.get_lines(input):
+        levels = [int(x) for x in report.split()]
+        if not  is_report_safe(levels):
+            bad_reports.append(report)
 
+    return bad_reports
+
+def solve_problem_1(input: str):
+    reports = helpers.get_all_lines(input)
+    bad_reports = find_bad_reports(input)
+
+    safe_reports = len(reports) - len(bad_reports)
     print(safe_reports)
+    return safe_reports
 
 PROBLEM_2_EXAMPLE__1_ANSWER = 4
 
 
 def solve_problem_2(input: str):
-    safe_reports = 0
-    bad_reports = []
-    for report in helpers.get_lines(input):
-        levels = [int(x) for x in report.split()]
-
-        step_direction = levels[0] - levels[1]
-        if step_direction > 0:
-            report_direction = "dec"
-        elif step_direction < 0:
-            report_direction = "inc"
-        else:
-            bad_reports.append(report)
-            continue
-
-        safe = True
-        for cur, next, pos in helpers.multi_iterate(levels):
-            if next is None:
-                continue
-
-            step_direction = cur - next
-            if abs(step_direction) < 1 or abs(step_direction) > 3:
-                safe = False
-                break
-
-            if step_direction > 0 and report_direction == "dec":
-                continue
-            elif step_direction < 0 and report_direction == "inc":
-                continue
-            else:
-                safe = False
-                break
-
-        if safe:
-            safe_reports += 1
-        else:
-            bad_reports.append(report)
+    reports = helpers.get_all_lines(input)
+    bad_reports = find_bad_reports(input)
+    safe_reports = len(reports) - len(bad_reports)
 
     for report in bad_reports:
         levels = [int(x) for x in report.split()]
@@ -99,35 +76,10 @@ def solve_problem_2(input: str):
             modified_levels = levels.copy()
             modified_levels.pop(i)
 
-            step_direction = modified_levels[0] - modified_levels[1]
-            if step_direction > 0:
-                report_direction = "dec"
-            elif step_direction < 0:
-                report_direction = "inc"
-            else:
-                continue
-
-            safe = True
-            for cur, next, pos in helpers.multi_iterate(modified_levels):
-                if next is None:
-                    continue
-
-                step_direction = cur - next
-                if abs(step_direction) < 1 or abs(step_direction) > 3:
-                    safe = False
-                    break
-
-                if step_direction > 0 and report_direction == "dec":
-                    continue
-                elif step_direction < 0 and report_direction == "inc":
-                    continue
-                else:
-                    safe = False
-                    break
-
-            if safe:
+            if is_report_safe(modified_levels):
                 safe_reports += 1
                 break
-    print(safe_reports)
 
-solve_problem_2(PROBLEM_1_EXAMPLE_1_INPUT)
+
+    print(safe_reports)
+    return safe_reports
