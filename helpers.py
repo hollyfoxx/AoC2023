@@ -1,11 +1,12 @@
-from typing import Tuple, Iterable, Any, Union
+from typing import Tuple, Iterable, Any, Union, List
 
 
-def get_lines(input: str):
+def get_lines(input: str, ignore_newlines: bool = True):
     lines = input.split('\n')
     for line in lines:
-        if not line.strip():
-            continue
+        if ignore_newlines:
+            if not line.strip():
+                continue
 
         yield line
 
@@ -14,6 +15,27 @@ def get_all_lines(input: str):
     lines = input.split('\n')
     return [line for line in lines if line.strip()]
 
+def get_blank_separated_groups(input: str) -> List[List[str]]:
+    groups = []
+    group = []
+    lines = get_lines(input, ignore_newlines=False)
+    for line in lines:
+        if not line.strip():
+            groups.append(group)
+            group = []
+        else:
+            group.append(line)
+
+    groups.append(group)
+
+    return groups
+
+def multi_iterate(l: List):
+    for i in range(0, len(l)):
+        if i + 1 == len(l):
+            yield l[i], None, i
+        else:
+            yield l[i], l[i + 1], i
 
 class Grid:
     """

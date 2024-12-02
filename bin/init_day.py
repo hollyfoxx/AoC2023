@@ -61,7 +61,6 @@ def solve_problem_1(input: str):
     raise NotImplementedError()
 
 
-PROBLEM_2_EXAMPLE_1_INPUT = "REPLACE_ME"
 PROBLEM_2_EXAMPLE__1_ANSWER = "REPLACE_ME"
 
 
