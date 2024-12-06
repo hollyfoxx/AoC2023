@@ -66,22 +66,30 @@ def solve_problem_2(input: str):
     guard_start = find_guard(original_lab_map)
     obstacle_positions = 0
 
+    original_obstacle_hit_map = {}
+    for obs in original_lab_map.all_coords():
+        if original_lab_map.get_coord_value(obs) in ["O", "#"]:
+            left, top, right, bottom = original_lab_map.get_adjacent_coords(obs)
+            original_obstacle_hit_map.update({
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            })
+
     for coord in original_lab_map.all_coords():
         print(coord)
         lab_map = helpers.Grid(input)
         if lab_map.get_coord_value(coord) not in ["^", "#"]:
-            obstacle_hit_map = {}
+            obstacle_hit_map = original_obstacle_hit_map.copy()
             lab_map.update_coord_value(coord, "O")
-
-            for obs in lab_map.all_coords():
-                if lab_map.get_coord_value(obs) in ["O", "#"]:
-                    left, top, right, bottom = lab_map.get_adjacent_coords(obs)
-                    obstacle_hit_map.update({
-                        top: 0,
-                        left: 0,
-                        bottom: 0,
-                        right: 0
-                    })
+            left, top, right, bottom = lab_map.get_adjacent_coords(coord)
+            obstacle_hit_map.update({
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0
+            })
         else:
             continue
 
@@ -91,7 +99,7 @@ def solve_problem_2(input: str):
             try:
                 lab_map, guard_pos = guard_step(lab_map, guard_pos)
                 if guard_pos in obstacle_hit_map:
-                    if obstacle_hit_map[guard_pos] > 2:
+                    if obstacle_hit_map[guard_pos] > 1:
                         obstacle_positions += 1
                         print(obstacle_positions)
                         break
