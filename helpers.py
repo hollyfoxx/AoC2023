@@ -48,6 +48,10 @@ class Grid:
         rows = input.split("\n")
         self.map = [list(row) for row in rows]
 
+    def pretty_print(self) -> None:
+        for row in range(len(self.map)):
+            print("".join(self.map[row]))
+
     def all_coords(self) -> Iterable[Tuple[int, int]]:
         for row in range(len(self.map)):
             for col in range(len(self.map[row])):
@@ -71,6 +75,26 @@ class Grid:
                 yield self.get_bottom_right_coord(current)
                 yield self.get_right_coord(current)
                 yield self.get_top_right_coord(current)
+
+    def get_adjacent_coords(self, coord: Tuple[int, int], incl_diagonals = False) -> Tuple[
+        Union[int, None], ...
+    ]:
+        """Return a tuple of (left, top, right, bottom) values to coordinate. If adjacent coord does not exist,
+        None will be included instead."""
+        left = self.get_left_coord(coord)
+        top = self.get_top_coord(coord)
+        right = self.get_right_coord(coord)
+        bottom = self.get_bottom_coord(coord)
+
+        if not incl_diagonals:
+            return left, top, right, bottom
+
+        top_left = self.get_top_left_coord(coord)
+        top_right = self.get_top_right_coord(coord)
+        bottom_left = self.get_bottom_left_coord(coord)
+        bottom_right = self.get_bottom_right_coord(coord)
+
+        return left, top_left, top, top_right, right, bottom_right, bottom, bottom_left
 
     def get_top_coord(self, coord: Tuple[int, int]) -> Any:
         row, col = coord[0], coord[1]
@@ -243,3 +267,6 @@ class Grid:
             return None
 
         return self.map[row + 1][col + 1]
+
+    def update_coord_value(self, coord: Tuple[int, int], new_value: Any) -> None:
+        self.map[coord[0]][coord[1]] = new_value
