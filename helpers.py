@@ -156,8 +156,8 @@ class Grid:
                 yield self.get_right_value(current)
                 yield self.get_top_right_value(current)
 
-    def get_adjacent_values(self, coord: Tuple[int, int]) -> Tuple[
-        Union[int, None], Union[int, None], Union[int, None], Union[int, None]
+    def get_adjacent_values(self, coord: Tuple[int, int], incl_diagonals = False) -> Tuple[
+        Union[int, None], ...
     ]:
         """Return a tuple of (left, top, right, bottom) values to coordinate. If adjacent coord does not exist,
         None will be included instead."""
@@ -166,7 +166,15 @@ class Grid:
         right = self.get_right_value(coord)
         bottom = self.get_bottom_value(coord)
 
-        return left, top, right, bottom
+        if not incl_diagonals:
+            return left, top, right, bottom
+
+        top_left = self.get_top_left_value(coord)
+        top_right = self.get_top_right_value(coord)
+        bottom_left = self.get_bottom_left_value(coord)
+        bottom_right = self.get_bottom_right_value(coord)
+
+        return left, top_left, top, top_right, right, bottom_right, bottom, bottom_left
 
     def get_top_value(self, coord: Tuple[int, int]) -> Any:
         row, col = coord[0], coord[1]
