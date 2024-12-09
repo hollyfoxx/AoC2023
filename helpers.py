@@ -57,6 +57,12 @@ class Grid:
             for col in range(len(self.map[row])):
                 yield row, col
 
+    def contains_coord(self, coord: Tuple[int, int]) -> bool:
+        if coord[0] < 0 or coord[1] < 0 or coord[0] >= len(self.map) or coord[1] >= len(self.map[0]):
+            return False
+
+        return True
+
     def get_coord_value(self, coord: Tuple[int, int]) -> Any:
         return self.map[coord[0]][coord[1]]
 
