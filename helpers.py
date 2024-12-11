@@ -1,4 +1,4 @@
-from typing import Tuple, Iterable, Any, Union, List
+from typing import Tuple, Iterable, Any, Union, List, Callable, Optional
 
 
 def get_lines(input: str, ignore_newlines: bool = True):
